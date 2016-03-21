@@ -241,7 +241,7 @@ poprawność. Prosimy reagować możliwie szybko, ale poprawnie.
 To zadanie potrwa około 3 minuty")
 
 run.trials(trial.code, condition = 'default', record.session = F, expand.grid(side = c('left', 'right')),
-           max.time = 5 * 60000, b = 3 * 60)
+           max.time = 3 * 60000, b = 3 * 60)
 
 gui.show.instruction("
 Prosimy teraz zapisać na kartce, z pamięci, w dowolnej kolejności,
@@ -299,4 +299,7 @@ znajdujący się w dolnej części ekranu.
 
 
 ## Koniec
+=======
+           max.time = 3 * 60000, b = 3 * 60)
+>>>>>>> 7e80957c933b1876013623c68ae1156bde69c02b
 if(!interactive())quit("no")
