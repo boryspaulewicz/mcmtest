@@ -133,7 +133,7 @@ pamięci.")
 run.trials(trial.code, expand.grid(scale = scale,
                                    samegender = str_split(cnd, '-')[[1]][1],
                                    word = c(sample(neg), sample(neu), sample(pos))),
-           record.session = T,
+           record.session = F,
            condition = cnd)
 
 
@@ -238,6 +238,6 @@ poprawność. Prosimy reagować możliwie szybko, ale poprawnie.
 
 To zadanie potrwa około 3 minuty")
 
-run.trials(trial.code, condition = 'default', record.session = T, expand.grid(side = c('left', 'right')),
-           max.time = 5 * 60000, b = 3 * 60)
+run.trials(trial.code, condition = 'default', record.session = F, expand.grid(side = c('left', 'right')),
+           max.time = 3 * 60000, b = 3 * 60)
 if(!interactive())quit("no")
