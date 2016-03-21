@@ -11,14 +11,10 @@ FIXATION.TIME = 1000
 POST.FIXATION.TIME = 1000
 PRESENTATION.TIME = 5000
 
-## Wczytujemy słowa z bazy i przygotowujemy zestaw bodźców
-words = readRDS('nawl.rds')
-words = words[words$Gram == 3,]
-words$val = (words$val_M_all - mean(words$val_M_all)) / sd(words$val_M_all)
-neg = words$NAWL_word[words$val < -1.4][1:NOF.ITEMS]
-neu = words$NAWL_word[abs(words$val) < .1][1:NOF.ITEMS]
-pos = words$NAWL_word[words$val > 1.4][1:NOF.ITEMS]
-rm(words)
+d = read.csv('slowa_final.csv')
+neg = sample(tolower(as.character(d$słowo[(d$emocja == 'neg') & (d$rodzaj == 'p')])), NOF.ITEMS)
+neu = sample(tolower(as.character(d$słowo[(d$emocja == 'neu') & (d$rodzaj == 'p')])), NOF.ITEMS)
+pos = sample(tolower(as.character(d$słowo[(d$emocja == 'poz') & (d$rodzaj == 'p')])), NOF.ITEMS)
 
 WINDOW$set.visible(T)
 WINDOW$set.mouse.cursor.visible(T)
@@ -29,6 +25,7 @@ scales = list(emotion = c('Znak emocji', 'Bardzo negatywne', 'Negatywne', 'Neutr
               imagine = c('Wyobrażalność', 'Bardzo trudno', 'Trudno', 'Przeciętnie', 'Łatwo', 'Bardzo łatwo'),
               arousal = c('Pobudzenie', '1', '2', '3', '4', '5', '6', '7'))
 
+## Test pamięciowy - ocena walencji ze stałym czasem ekspozycji
 trial.code = function(trial, word = 'test', samegender = 'same', scale = 'emotion'){
     ## Kod specyficzny dla zadania
     ## ...
@@ -72,6 +69,7 @@ trial.code = function(trial, word = 'test', samegender = 'same', scale = 'emotio
             }
         }, 'post-fixation' = {
             if((CLOCK$time - fixation.cleared) > POST.FIXATION.TIME){
+                scale.onset = CLOCK$time
                 state = 'rating'
             }
         }, 'rating' = {
@@ -101,9 +99,14 @@ trial.code = function(trial, word = 'test', samegender = 'same', scale = 'emotio
     }
 }
 
-gui.show.instruction("W czasie eksperymentu obowiązuje cisza. Wyłącz telefon komórkowy. W razie jakichkolwiek wątpliwości nie wołaj osoby prowadzącej, tylko podnieś do góry rękę - osoba prowadząca podejdzie w dogodnym momencie i postara się udzielić wszelkich wyjaśnień. 
-Badanie jest anonimowe. Za chwilę zostaniesz poproszona/y o podanie danych: wieku, płci oraz pseudonimu. Pseudonim składa się z inicjałów (małymi literami) oraz czterech cyfr: dnia 
-i miesiąca urodzenia (np.  ms0706). 
+gui.show.instruction("W czasie eksperymentu obowiązuje cisza. Wyłącz telefon komórkowy.
+W razie jakichkolwiek wątpliwości nie wołaj osoby prowadzącej, tylko podnieś do góry rękę.
+Osoba prowadząca podejdzie w dogodnym momencie i postara się udzielić wszelkich wyjaśnień. 
+Badanie jest anonimowe.
+
+Za chwilę zostaniesz poproszona/y o podanie danych: wieku, płci oraz pseudonimu.
+Pseudonim składa się z inicjałów (małymi literami) oraz czterech cyfr:
+dnia i miesiąca urodzenia (np.  ms0706).
 ")
 gui.user.data()
 
@@ -133,7 +136,7 @@ pamięci.")
 run.trials(trial.code, expand.grid(scale = scale,
                                    samegender = str_split(cnd, '-')[[1]][1],
                                    word = c(sample(neg), sample(neu), sample(pos))),
-           record.session = T,
+           record.session = F,
            condition = cnd)
 
 
@@ -227,17 +230,73 @@ TASK.NAME <<- 'leftright'
 gui.show.instruction("
 Teraz rozpocznie się zadanie wymagające szybkiego rozpoznawania słów.
 
-Na środku ekranu będą się pojawiały, w losowej kolejności, słowa
-LEWO lub PRAWO. Gdy tylko pojawi się słowo, należy nacisnąć
-odpowiednią strzałkę na klawiaturze. Jeżeli będzie to słowo LEWO,
-należy nacisnąć klawisz STRZAŁKA W LEWO, a jeżeli słowo PRAWO, to
-strzałkę STRZAŁKA W PRAWO.
+Na środku ekranu będą się pojawiały słowa LEWO lub PRAWO.
+Gdy tylko pojawi się słowo, należy nacisnąć odpowiednią strzałkę na klawiaturze.
+Jeżeli będzie to słowo LEWO, należy nacisnąć klawisz STRZAŁKA W LEWO,
+a jeżeli słowo PRAWO, to strzałkę STRZAŁKA W PRAWO.
 
 Program będzie rejestrował zarówno czas reakcji, jak i
 poprawność. Prosimy reagować możliwie szybko, ale poprawnie.
 
 To zadanie potrwa około 3 minuty")
 
-run.trials(trial.code, condition = 'default', record.session = T, expand.grid(side = c('left', 'right')),
+run.trials(trial.code, condition = 'default', record.session = F, expand.grid(side = c('left', 'right')),
            max.time = 5 * 60000, b = 3 * 60)
+
+gui.show.instruction("
+Prosimy teraz zapisać na kartce, z pamięci, w dowolnej kolejności,
+słowa, które pojawiały się na ekranie w pierwszym zadaniu. Etap
+odtwarzania słów będzie trwał około 3 minuty.
+
+Po upłynięciu 3 minut od momentu naciśnięcia przycisku 'Dalej'
+ekran zacznie migotać, aby zasygnalizować przejście do następnego
+etapu.
+
+Proszę nacisnąć przycisk 'Dalej' w dolnej części okna, aby rozpocząć
+etap odtwarzania słów z pamięci.
+")
+
+WINDOW$set.visible(T)
+recall.start = CLOCK$time
+while((CLOCK$time - recall.start) < 3 * 60 * 1000){
+    if(WINDOW$is.open())process.inputs()
+    WINDOW$clear(c(0, 0, 0))
+    WINDOW$display()
+}
+## Migotanie
+blinking.start = CLOCK$time
+TXT$set.string("Koniec odtwarzania. Naciśnij spację.")
+center.win(TXT)
+while(WINDOW$is.open()){
+    process.inputs()
+    if(KEY.PRESSED[Key.Space + 1] > blinking.start){
+        break
+    }else{
+        col = ceiling(CLOCK$time / 1000) %% 2
+        WINDOW$clear(c(col, col, col))
+        WINDOW$draw(TXT)
+        WINDOW$display()
+    }
+}
+
+gui.show.instruction("
+Teraz nastąpi kolejny etap zadania. Obok każdego słowa zapisanego
+na kartce proszę zaznaczyć, na ile jesteś pewna/pewien, że to słowo
+było (lub nie było) prezentowane wcześniej w zestawie do zapamiętania.
+
+1 oznacza, że nie jesteś W OGÓLE pewna/pewny
+
+2 oznacza, że jesteś NIEZBYT pewna/pewny
+
+3 oznacza, że jesteś RACZEJ pewna/pewny
+
+4 oznacza, że jesteś CAŁKOWICIE pewna/pewny
+
+Po zakończeniu oceny słów proszę nacisnąć przycisk Dalej,
+znajdujący się w dolnej części ekranu.
+")
+
+
+
+## Koniec
 if(!interactive())quit("no")
