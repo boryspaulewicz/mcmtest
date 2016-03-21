@@ -99,7 +99,9 @@ trial.code = function(trial, word = 'test', samegender = 'same', scale = 'emotio
     }
 }
 
-gui.show.instruction("W czasie eksperymentu obowiązuje cisza. Wyłącz telefon komórkowy.
+if(is.null(USER.DATA$name)){
+
+    gui.show.instruction("W czasie eksperymentu obowiązuje cisza. Wyłącz telefon komórkowy.
 W razie jakichkolwiek wątpliwości nie wołaj osoby prowadzącej, tylko podnieś do góry rękę.
 Osoba prowadząca podejdzie w dogodnym momencie i postara się udzielić wszelkich wyjaśnień. 
 Badanie jest anonimowe.
@@ -108,10 +110,8 @@ Za chwilę zostaniesz poproszona/y o podanie danych: wieku, płci oraz pseudonim
 Pseudonim składa się z inicjałów (małymi literami) oraz czterech cyfr:
 dnia i miesiąca urodzenia (np.  ms0706).
 ")
-gui.user.data()
-
-cnd = 'same-emotion'
-scale = str_split(cnd, '-')[[1]][2]
+    gui.user.data()
+}
 
 gui.show.instruction("
 Teraz rozpocznie się zadanie wymagające zapamiętywania i oceny
@@ -133,12 +133,10 @@ Należy starać się zapamiętywać wszystkie prezentowane słowa,
 ponieważ na końcu badania będzie trzeba spróbować je odtworzyć z
 pamięci.")
 
-run.trials(trial.code, expand.grid(scale = scale,
-                                   samegender = str_split(cnd, '-')[[1]][1],
+run.trials(trial.code, expand.grid(scale = 'emotion', samegender = 'same',
                                    word = c(sample(neg), sample(neu), sample(pos))),
            record.session = F,
            condition = cnd)
-
 
 ######################################################################
 ## Zadanie dystrakcyjne - reagujemy lewo, prawo
