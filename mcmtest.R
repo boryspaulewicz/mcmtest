@@ -297,7 +297,4 @@ znajdujący się w dolnej części ekranu.
 
 
 ## Koniec
-=======
-           max.time = 3 * 60000, b = 3 * 60)
->>>>>>> 7e80957c933b1876013623c68ae1156bde69c02b
 if(!interactive())quit("no")
