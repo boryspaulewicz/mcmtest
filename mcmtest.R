@@ -133,7 +133,7 @@ pamięci.")
 
 run.trials(trial.code, expand.grid(scale = 'emotion', samegender = 'same',
                                    word = c(sample(neg), sample(neu), sample(pos))),
-           record.session = F,
+           record.session = T,
            condition = cnd)
 
 ######################################################################
@@ -236,13 +236,14 @@ poprawność. Prosimy reagować możliwie szybko, ale poprawnie.
 
 To zadanie potrwa około 3 minuty")
 
-run.trials(trial.code, condition = 'default', record.session = F, expand.grid(side = c('left', 'right')),
+run.trials(trial.code, condition = 'default', record.session = T, expand.grid(side = c('left', 'right')),
            max.time = 3 * 60000, b = 3 * 60)
 
 gui.show.instruction("
 Prosimy teraz zapisać na kartce, z pamięci, w dowolnej kolejności,
 słowa, które pojawiały się na ekranie w pierwszym zadaniu. Etap
-odtwarzania słów będzie trwał około 3 minuty.
+odtwarzania słów będzie trwał około 3 minuty. W tym czasie nic
+nie pojawi się na ekranie komputera.
 
 Po upłynięciu 3 minut od momentu naciśnięcia przycisku 'Dalej'
 ekran zacznie migotać, aby zasygnalizować przejście do następnego
