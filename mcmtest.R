@@ -21,9 +21,7 @@ WINDOW$set.mouse.cursor.visible(T)
 
 FX = fixation(WINDOW, size = .02)
 
-scales = list(emotion = c('Znak emocji', 'Bardzo negatywne', 'Negatywne', 'Neutralne', 'Pozytywne', 'Bardzo pozytywne'),
-              imagine = c('Wyobrażalność', 'Bardzo trudno', 'Trudno', 'Przeciętnie', 'Łatwo', 'Bardzo łatwo'),
-              arousal = c('Pobudzenie', '1', '2', '3', '4', '5', '6', '7'))
+scales = list(emotion = c('', 'Bardzo negatywne', 'Negatywne', 'Neutralne', 'Pozytywne', 'Bardzo pozytywne'))
 
 ## Test pamięciowy - ocena walencji ze stałym czasem ekspozycji
 trial.code = function(trial, word = 'test', samegender = 'same', scale = 'emotion'){
@@ -271,6 +269,7 @@ while(WINDOW$is.open()){
         break
     }else{
         col = ceiling(CLOCK$time / 1000) %% 2
+        TXT$set.color(c(1 - col, 1 - col, 1 - col))
         WINDOW$clear(c(col, col, col))
         WINDOW$draw(TXT)
         WINDOW$display()
