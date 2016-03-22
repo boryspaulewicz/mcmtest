@@ -134,7 +134,7 @@ pamięci.")
 run.trials(trial.code, expand.grid(scale = 'emotion', samegender = 'same',
                                    word = c(sample(neg), sample(neu), sample(pos))),
            record.session = F,
-           condition = cnd)
+           condition = 'default')
 
 ######################################################################
 ## Zadanie dystrakcyjne - reagujemy lewo, prawo
@@ -292,8 +292,6 @@ było (lub nie było) prezentowane wcześniej w zestawie do zapamiętania.
 Po zakończeniu oceny słów proszę nacisnąć przycisk Dalej,
 znajdujący się w dolnej części ekranu.
 ")
-
-
 
 ## Koniec
 if(!interactive())quit("no")
