@@ -127,9 +127,9 @@ skrajnie z prawej strony - maksymalnie pozytywne skojarzenia.
 Samo położenie kursora myszki nie wystarczy, należy jeszcze
 potwierdzić ocenę klikając lewy przycisk myszki.
 
-Należy starać się zapamiętywać wszystkie prezentowane słowa,
-ponieważ na końcu badania będzie trzeba spróbować je odtworzyć z
-pamięci.")
+Należy starać się zapamiętywać wszystkie prezentowane i oceniane
+słowa, ponieważ na końcu badania będzie trzeba spróbować je
+odtworzyć z pamięci.")
 
 run.trials(trial.code, expand.grid(scale = 'emotion', samegender = 'same',
                                    word = c(sample(neg), sample(neu), sample(pos))),
@@ -241,9 +241,9 @@ run.trials(trial.code, condition = 'default', record.session = T, expand.grid(si
 
 gui.show.instruction("
 Prosimy teraz zapisać na kartce, z pamięci, w dowolnej kolejności,
-słowa, które pojawiały się na ekranie w pierwszym zadaniu. Etap
-odtwarzania słów będzie trwał około 3 minuty. W tym czasie nic
-nie pojawi się na ekranie komputera.
+słowa, które pojawiały się na ekranie w zadaniu zapamiętywania i oceny
+słów. Etap odtwarzania słów będzie trwał około 3 minuty.
+W tym czasie nic nie pojawi się na ekranie komputera.
 
 Po upłynięciu 3 minut od momentu naciśnięcia przycisku 'Dalej'
 ekran zacznie migotać, aby zasygnalizować przejście do następnego
