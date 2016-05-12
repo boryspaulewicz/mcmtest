@@ -3,7 +3,9 @@
 ## Procedura: każda osoba ma oceniać i zapamiętać 30 przymiotników
 ## neg, neu i poz. Czas prezentacji każdego słowa jest stały.
 ##
-if(interactive())source('~/cs/code/r/tasks/task/task.R')
+if(is.null(USER.DATA$name)){
+    if(interactive())source('~/cs/code/r/tasks/task/task.R')
+}
 TASK.NAME <<- 'mcmtest'
 
 NOF.ITEMS = 10
